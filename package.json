@@ -1,0 +1,20 @@
+{
+  "name": "@opendash/user-adapter-parse-plus",
+  "version": "4.0.0",
+  "author": "Sebastian Zilles <sebastian@zilles.io>",
+  "license": "MIT",
+  "main": "index.js",
+  "scripts": {
+    "build": "babel src/index.js --out-file index.js",
+    "prepare": "npm run build"
+  },
+  "devDependencies": {
+    "babel-cli": "^6.0.0",
+    "babel-preset-minify": "^0.2.0",
+    "babel-preset-es2015": "^6.0.0",
+    "babel-preset-stage-2": "^6.0.0"
+  },
+  "dependencies": {
+    "parse": "^1.10.0"
+  }
+}
