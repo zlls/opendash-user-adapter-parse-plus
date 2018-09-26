@@ -210,11 +210,9 @@ export default class UserAdapter {
         locations.set(location.id, location);
       }
 
-      return result.map(location => ({
-        id: location.id,
-        name: location.get("name"),
-        data: JSON.parse(location.get("data"))
-      }));
+      return result.map(location => {
+        return Object.assign({ id: location.id }, location.toJSON());
+      });
     } catch (error) {
       throw new Error(`User Adapter Error: ${error.code} ${error.message}`);
     }
