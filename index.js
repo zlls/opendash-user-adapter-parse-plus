@@ -31,7 +31,8 @@ export default class UserAdapter {
   async login(login, password) {
     try {
       let user = await Parse.User.logIn(login, password);
-      return user;
+
+      return this.checkAuth();
     } catch (error) {
       throw new Error("Kombination aus Email und Passwort sind falsch.");
     }
@@ -52,12 +53,21 @@ export default class UserAdapter {
     user.set("password", payload.password);
     user.set("email", payload.email);
 
-    return await user.signUp(null);
+    await user.signUp(null);
+
+    return this.checkAuth();
   }
 
   async checkAuth() {
     if (Parse.User.current()) {
-      return Parse.User.current();
+      let user = Parse.User.current();
+
+      return {
+        id: user.id,
+        email: user.getEmail(),
+        username: user.getUsername(),
+        session: user.getSessionToken()
+      };
     }
 
     throw new Error("User not logged in.");
