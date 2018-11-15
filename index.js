@@ -152,7 +152,8 @@ export default class UserAdapter {
         location: dashboard.get("location"),
         name: dashboard.get("name"),
         version: dashboard.get("version"),
-        widgets: JSON.parse(dashboard.get("widgets"))
+        widgets: JSON.parse(dashboard.get("widgets")),
+        shared: Object.keys(dashboard.getACL().permissionsById).length > 1
       };
     } catch (error) {
       throw new Error(`User Adapter Error: ${error.code} ${error.message}`);
@@ -232,7 +233,6 @@ export default class UserAdapter {
     let users = await new Parse.Query(Parse.User).find();
 
     users = users.filter(u => u.id !== Parse.User.current().id);
-    console.log(users);
 
     return users.map(user => {
       return {
