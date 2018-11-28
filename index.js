@@ -147,13 +147,21 @@ export default class UserAdapter {
 
       let dashboard = dashboards.get(id);
 
+      let shared = Object.keys(dashboard.getACL().permissionsById).filter(
+        id => id !== Parse.User.current().id
+      );
+
+      if (shared.length < 1) {
+        shared = false;
+      }
+
       return {
         id: dashboard.id,
         location: dashboard.get("location"),
         name: dashboard.get("name"),
         version: dashboard.get("version"),
         widgets: JSON.parse(dashboard.get("widgets")),
-        shared: Object.keys(dashboard.getACL().permissionsById).length > 1
+        shared
       };
     } catch (error) {
       throw new Error(`User Adapter Error: ${error.code} ${error.message}`);
