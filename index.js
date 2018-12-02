@@ -223,15 +223,28 @@ export default class UserAdapter {
     try {
       let query = new Parse.Query(LocationClass);
 
+      // query.include("children");
+
       let result = await query.find();
+      let locs = [];
 
       for (const location of result) {
-        locations.set(location.id, location);
+        let id = location.id;
+        let children = null;
+
+        if (location.has("children")) {
+          let x = await location
+            .get("children")
+            .query()
+            .find();
+
+          children = x.map(child => child.id);
+        }
+
+        locs.push(Object.assign({}, location.toJSON(), { id, children }));
       }
 
-      return result.map(location => {
-        return Object.assign({ id: location.id }, location.toJSON());
-      });
+      return locs;
     } catch (error) {
       throw new Error(`User Adapter Error: ${error.code} ${error.message}`);
     }
