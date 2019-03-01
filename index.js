@@ -207,11 +207,13 @@ export default class UserAdapter {
     try {
       let dashboard = dashboards.get(id);
 
+      console.log(dashboard);
+
       // delete the dashboard from cache
       dashboards.delete(id);
 
       // delete the dashboard in parse
-      await dashboard.delete();
+      await dashboard.destroy();
 
       return dashboard.id;
     } catch (error) {
