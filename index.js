@@ -99,16 +99,21 @@ export default class UserAdapter {
 
   async setData(key, value) {
     try {
-      // if (cache.has(key)) {
-      //     let obj = cache.get(key);
-
-      //     obj.set('value', value);
-
-      //     await obj.save(null);
-      // } else {
       const user = await Parse.User.current();
 
-      let obj = new UserDataClass();
+      let obj = cache.get(key);
+
+      if (!obj) {
+        let query = new Parse.Query(UserDataClass);
+        query.equalTo("user", user);
+        query.equalTo("key", key);
+
+        obj = await query.first();
+      }
+
+      if (!obj) {
+        obj = new UserDataClass();
+      }
 
       obj.set("user", user);
       obj.set("key", key);
@@ -117,7 +122,6 @@ export default class UserAdapter {
       await obj.save(null);
 
       cache.set(key, obj);
-      // }
 
       return true;
     } catch (error) {
