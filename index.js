@@ -62,6 +62,8 @@ export default class UserAdapter {
     if (Parse.User.current()) {
       let user = Parse.User.current();
 
+      await user.fetch();
+
       return {
         id: user.id,
         email: user.getEmail(),
