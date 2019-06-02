@@ -258,6 +258,30 @@ export default class UserAdapter {
     }
   }
 
+  async listRoles() {
+    let roles = await new Parse.Query(Parse.Role).find();
+
+    return roles.map(role => {
+      return {
+        id: role.id,
+        name: role.get("name")
+      };
+    });
+  }
+
+  async listUserRoles() {
+    let roles = await new Parse.Query(Parse.Role)
+      .containedIn("users", [Parse.User.current()])
+      .find();
+
+    return roles.map(role => {
+      return {
+        id: role.id,
+        name: role.get("name")
+      };
+    });
+  }
+
   async listUsers() {
     let users = await new Parse.Query(Parse.User).find();
 
