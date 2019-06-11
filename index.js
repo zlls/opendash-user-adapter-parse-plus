@@ -75,6 +75,14 @@ export default class UserAdapter {
     throw new Error("User not logged in.");
   }
 
+  async setPassword(password) {
+    const user = await Parse.User.current();
+
+    user.setPassword(password);
+
+    await user.save();
+  }
+
   async getData(key) {
     try {
       // if (cache.has(key)) {
