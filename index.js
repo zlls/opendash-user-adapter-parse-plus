@@ -30,7 +30,7 @@ export default class UserAdapter {
 
   async login(login, password) {
     try {
-      let user = await Parse.User.logIn(login, password);
+      let user = await Parse.User.logIn(login.toLowerCase(), password);
 
       return this.checkAuth();
     } catch (error) {
@@ -49,9 +49,9 @@ export default class UserAdapter {
   async register(payload) {
     const user = new Parse.User();
 
-    user.set("username", payload.email);
+    user.set("username", payload.email.toLowerCase());
     user.set("password", payload.password);
-    user.set("email", payload.email);
+    user.set("email", payload.email.toLowerCase());
 
     await user.signUp(null);
 
