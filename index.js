@@ -30,12 +30,29 @@ export default class UserAdapter {
 
   async login(login, password) {
     try {
-      let user = await Parse.User.logIn(login.toLowerCase(), password);
+      try {
+        await Parse.User.logIn(login.toLowerCase(), password);
+      } catch (error) {
+        await this.loginWithCloudCode(login, password);
+      }
 
       return this.checkAuth();
     } catch (error) {
       throw new Error("Kombination aus Email und Passwort sind falsch.");
     }
+  }
+
+  async loginWithCloudCode(login, password) {
+    const user = await Parse.Cloud.run("ldap_login", {
+      username: login.toLowerCase(),
+      password
+    });
+
+    if (!user && !user.session) {
+      throw new Error("Kombination aus Email und Passwort sind falsch.");
+    }
+
+    await Parse.User.become(user.session);
   }
 
   async logout() {
