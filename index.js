@@ -45,7 +45,7 @@ export default class UserAdapter {
   async loginWithCloudCode(login, password) {
     const user = await Parse.Cloud.run("ldap_login", {
       username: login.toLowerCase(),
-      password
+      password,
     });
 
     if (!user && !user.session) {
@@ -85,7 +85,7 @@ export default class UserAdapter {
         id: user.id,
         email: user.getEmail(),
         username: user.getUsername(),
-        session: user.getSessionToken()
+        session: user.getSessionToken(),
       };
     }
 
@@ -166,7 +166,7 @@ export default class UserAdapter {
         dashboards.set(dashboard.id, dashboard);
       }
 
-      return result.map(dashboard => dashboard.id);
+      return result.map((dashboard) => dashboard.id);
     } catch (error) {
       throw new Error(`User Adapter Error: ${error.code} ${error.message}`);
     }
@@ -179,7 +179,7 @@ export default class UserAdapter {
       let dashboard = dashboards.get(id);
 
       let shared = Object.keys(dashboard.getACL().permissionsById).filter(
-        id => id !== Parse.User.current().id
+        (id) => id !== Parse.User.current().id
       );
 
       if (shared.length < 1) {
@@ -192,7 +192,7 @@ export default class UserAdapter {
         name: dashboard.get("name"),
         version: dashboard.get("version"),
         widgets: JSON.parse(dashboard.get("widgets")),
-        shared
+        shared,
       };
     } catch (error) {
       throw new Error(`User Adapter Error: ${error.code} ${error.message}`);
@@ -254,7 +254,7 @@ export default class UserAdapter {
 
   async listLocations() {
     try {
-      let query = new Parse.Query(LocationClass);
+      let query = new Parse.Query(LocationClass).limit(999999);
 
       // query.include("children");
 
@@ -266,12 +266,9 @@ export default class UserAdapter {
         let children = null;
 
         if (location.has("children")) {
-          let x = await location
-            .get("children")
-            .query()
-            .find();
+          let x = await location.get("children").query().find();
 
-          children = x.map(child => child.id);
+          children = x.map((child) => child.id);
         }
 
         locs.push(Object.assign({}, location.toJSON(), { id, children }));
@@ -286,10 +283,10 @@ export default class UserAdapter {
   async listRoles() {
     let roles = await new Parse.Query(Parse.Role).find();
 
-    return roles.map(role => {
+    return roles.map((role) => {
       return {
         id: role.id,
-        name: role.get("name")
+        name: role.get("name"),
       };
     });
   }
@@ -299,10 +296,10 @@ export default class UserAdapter {
       .containedIn("users", [Parse.User.current()])
       .find();
 
-    return roles.map(role => {
+    return roles.map((role) => {
       return {
         id: role.id,
-        name: role.get("name")
+        name: role.get("name"),
       };
     });
   }
@@ -310,13 +307,13 @@ export default class UserAdapter {
   async listUsers() {
     let users = await new Parse.Query(Parse.User).find();
 
-    users = users.filter(u => u.id !== Parse.User.current().id);
+    users = users.filter((u) => u.id !== Parse.User.current().id);
 
-    return users.map(user => {
+    return users.map((user) => {
       return {
         id: user.id,
         name: user.get("username"),
-        email: user.get("email")
+        email: user.get("email"),
       };
     });
   }
@@ -343,7 +340,7 @@ export default class UserAdapter {
 
       let result = await query.find();
 
-      return result.map(x => JSON.parse(x.get("data")));
+      return result.map((x) => JSON.parse(x.get("data")));
     } catch (error) {
       throw new Error(`User Adapter Error: ${error.code} ${error.message}`);
     }
