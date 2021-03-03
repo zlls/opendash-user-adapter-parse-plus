@@ -158,7 +158,7 @@ export default class UserAdapter {
 
   async listDashboards() {
     try {
-      let query = new Parse.Query(DashboardClass);
+      let query = new Parse.Query(DashboardClass).limit(999999);
 
       let result = await query.find();
 
@@ -281,7 +281,7 @@ export default class UserAdapter {
   }
 
   async listRoles() {
-    let roles = await new Parse.Query(Parse.Role).find();
+    let roles = await new Parse.Query(Parse.Role).limit(999999).find();
 
     return roles.map((role) => {
       return {
@@ -294,6 +294,7 @@ export default class UserAdapter {
   async listUserRoles() {
     let roles = await new Parse.Query(Parse.Role)
       .containedIn("users", [Parse.User.current()])
+      .limit(999999)
       .find();
 
     return roles.map((role) => {
@@ -305,7 +306,7 @@ export default class UserAdapter {
   }
 
   async listUsers() {
-    let users = await new Parse.Query(Parse.User).find();
+    let users = await new Parse.Query(Parse.User).limit(999999).find();
 
     users = users.filter((u) => u.id !== Parse.User.current().id);
 
@@ -333,7 +334,7 @@ export default class UserAdapter {
 
   async listSharedData(type) {
     try {
-      let query = new Parse.Query(SharedDataClass);
+      let query = new Parse.Query(SharedDataClass).limit(999999);
 
       query.equalTo("show", true);
       query.equalTo("type", type);
