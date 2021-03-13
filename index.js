@@ -174,7 +174,7 @@ export default class UserAdapter {
 
   async getDashboard(id) {
     try {
-      await this.listDashboards();
+      // await this.listDashboards();
 
       let dashboard = dashboards.get(id);
 
@@ -227,6 +227,8 @@ export default class UserAdapter {
       dashboard.setACL(new Parse.ACL(Parse.User.current()));
 
       await dashboard.save();
+
+      dashboards.set(id, dashboard);
 
       return dashboard.id;
     } catch (error) {
