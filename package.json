@@ -1,6 +1,6 @@
 {
   "name": "@opendash/user-adapter-parse-plus",
-  "version": "4.5.2",
+  "version": "4.5.3",
   "author": "Sebastian Zilles <sebastian@zilles.io>",
   "license": "MIT",
   "main": "index.js",
