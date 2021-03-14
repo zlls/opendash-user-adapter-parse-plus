@@ -228,7 +228,7 @@ export default class UserAdapter {
 
       await dashboard.save();
 
-      dashboards.set(id, dashboard);
+      dashboards.set(dashboard.id, dashboard);
 
       return dashboard.id;
     } catch (error) {
